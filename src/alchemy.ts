@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const APP_ID = 'iluc52f76fsv8qct';
+const APP_SESSION_ID = process.env.ALCHEMY_SESSION_ID;
 
-const COOKIE = 'sessionid=oi2bzfqyd1rjmrz8j0ee7mx1r7appdie;';
+const COOKIE = `sessionid=${APP_SESSION_ID};`;
 
 const client = axios.create({
 	baseURL: 'https://dashboard.alchemyapi.io/api',

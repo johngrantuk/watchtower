@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { getFailedTransactions } from './alchemy';
 import { sendTransaction } from './slack';
 import { getTransactionMetadata } from './transactions';

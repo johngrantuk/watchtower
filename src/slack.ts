@@ -3,6 +3,10 @@ import { getSimulationUrl } from './tenderly';
 
 import { TransactionMetadata } from './transactions';
 
+const APP_ID = 'T013ZQFUALE';
+const WEBKOOK_ID = process.env.SLACK_WEBKOOK_ID;
+const WEBKOOK_KEY = process.env.SLACK_WEBKOOK_KEY;
+
 const client = axios.create({
 	baseURL: 'https://hooks.slack.com/',
 	headers: {
@@ -12,12 +16,9 @@ const client = axios.create({
 
 export async function sendTransaction(tx: TransactionMetadata) {
 	const text = formatTransaction(tx);
-	await client.post(
-		'services/T013ZQFUALE/B01SE9NLQMR/qozjwzdpMtmON0lJb0kuY9Pe',
-		{
-			text,
-		},
-	);
+	await client.post(`services/${APP_ID}/${WEBKOOK_ID}/${WEBKOOK_KEY}`, {
+		text,
+	});
 }
 
 function formatTransaction(tx: TransactionMetadata): string {
