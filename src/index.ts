@@ -1,28 +1,21 @@
-import express from 'express';
-const app = express();
+import { getFailedTransactions } from './alchemy';
+import { sendMessage } from './slack';
 
-import { ok } from './router';
-
-// CORS
-app.use((_req: any, res: any, next: any) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept',
-	);
-	next();
-});
-
-app.get('/', ok);
-
-app.use(errorHandler);
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-	console.log(`Listening on port ${port}.`);
-});
-
-function errorHandler(err: any, _req: any, res: any, next: any) {
-	res.status(400).end();
-	next(err);
+async function sleep(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+async function loop() {
+	const minTimestamp = Date.now();
+	while (true) {
+		const transactions = await getFailedTransactions(minTimestamp);
+		if (transactions.length > 0) {
+			await sendMessage(`Failed transactions: ${transactions.length}`);
+		} else {
+			await sendMessage('No failed transactions');
+		}
+		await sleep(5 * 60 * 1000);
+	}
+}
+
+loop();
