@@ -20,11 +20,10 @@ interface TransactionResponse {
 	data: Transaction[];
 }
 
-export async function getFailedTransactions(): Promise<Transaction[]> {
-	const lastTimestamp = 1616666750674;
+export async function getFailedTransactions(minTimestamp: number): Promise<Transaction[]> {
 	const params = {
 		filters: {
-			time_min: lastTimestamp,
+			time_min: minTimestamp,
 			eth_methods: ['eth_estimateGas'],
 			http_status_code_min: 200,
 			http_status_code_max: 200,
