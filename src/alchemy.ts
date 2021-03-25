@@ -36,7 +36,7 @@ export async function getFailedTransactions(
 			eth_methods: ['eth_estimateGas'],
 			http_status_code_min: 200,
 			http_status_code_max: 200,
-			eth_error_code_min: -32000,
+			eth_error_code_min: -32016,
 			eth_error_code_max: -32000,
 			app_ids: [APP_ID],
 		},
