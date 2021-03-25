@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getSimulationUrl } from './tenderly';
 
 import { TransactionMetadata } from './transactions';
 
@@ -25,12 +26,15 @@ function formatTransaction(tx: TransactionMetadata): string {
 		42: 'Kovan',
 	};
 	const network = networkMap[tx.chainId];
+	const url = getSimulationUrl(tx);
 	const message = `
 		_Details_
 		*Network*: ${network}
 		*Sender*: ${tx.from}
 		*Contract*: ${tx.to}
 		*Data*: ${tx.data}
+
+		<${url}|Tenderly Simulation>
 	`;
 	return message;
 }
