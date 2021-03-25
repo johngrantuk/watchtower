@@ -16,7 +16,7 @@ export function getTransactionMetadata(
 	const request = JSON.parse(transaction.request);
 	const { gasPrice, value, to, data } = request.params[0];
 	const metadata = {
-		chainId: 42,
+		chainId: 1,
 		from: gasPrice,
 		to,
 		data,
