@@ -13,6 +13,12 @@ const client = axios.create({
 
 export interface Transaction {
 	app_id: string;
+	eth_network: number;
+	request: string;
+	response: string;
+	response_status_code: number;
+	response_error_code: number;
+	timestamp: string;
 	duration: number;
 }
 
