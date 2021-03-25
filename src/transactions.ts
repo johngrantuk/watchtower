@@ -30,19 +30,3 @@ export function getV2Transactions(
 ): TransactionMetadata[] {
 	return metadata.filter((m) => m.to !== EXCHANGE_PROXY);
 }
-
-export function formatTransactionMessage(tx: TransactionMetadata): string {
-	const networkMap: Record<number, string> = {
-		1: 'Mainnet',
-		42: 'Kovan',
-	};
-	const network = networkMap[tx.chainId];
-	const message = `
-		_Details_
-		*Network*: ${network}
-		*Sender*: ${tx.from}
-		*Contract*: ${tx.to}
-		*Data*: ${tx.data}
-	`;
-	return message;
-}
