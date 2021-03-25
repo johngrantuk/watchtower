@@ -15,8 +15,9 @@ export function getTransactionMetadata(
 ): TransactionMetadata {
 	const request = JSON.parse(transaction.request);
 	const { gasPrice, value, to, data } = request.params[0];
+	const chainId = getChainId(transaction.eth_network);
 	const metadata = {
-		chainId: 1,
+		chainId,
 		from: gasPrice,
 		to,
 		data,
@@ -29,4 +30,12 @@ export function getV2Transactions(
 	metadata: TransactionMetadata[],
 ): TransactionMetadata[] {
 	return metadata.filter((m) => m.to !== EXCHANGE_PROXY);
+}
+
+function getChainId(ethNetwork: number) {
+	const chainIdMap: Record<number, number> = {
+		0: 1,
+		3: 42,
+	};
+	return chainIdMap[ethNetwork];
 }
