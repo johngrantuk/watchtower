@@ -26,7 +26,9 @@ interface TransactionResponse {
 	data: Transaction[];
 }
 
-export async function getFailedTransactions(minTimestamp: number): Promise<Transaction[]> {
+export async function getFailedTransactions(
+	minTimestamp: number,
+): Promise<Transaction[]> {
 	const params = {
 		filters: {
 			time_min: minTimestamp,
