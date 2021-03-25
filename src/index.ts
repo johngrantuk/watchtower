@@ -3,7 +3,9 @@ dotenv.config();
 
 import { getFailedTransactions } from './alchemy';
 import { sendTransaction } from './slack';
-import { getTransactionMetadata } from './transactions';
+import { getTransactionMetadata, getV2Transactions } from './transactions';
+
+const POLL_PERIOD_MINS = 5;
 
 async function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -12,15 +14,16 @@ async function sleep(ms: number) {
 async function loop() {
 	let minTimestamp = Date.now();
 	for (;;) {
-		const transactions = await getFailedTransactions(minTimestamp);
-		const metadata = transactions.map((transaction) =>
+		const rawTransactions = await getFailedTransactions(minTimestamp);
+		const transactions = rawTransactions.map((transaction) =>
 			getTransactionMetadata(transaction),
 		);
-		if (metadata.length > 0) {
-			await sendTransaction(metadata[0]);
+		const v2Transactions = getV2Transactions(transactions);
+		if (v2Transactions.length > 0) {
+			await sendTransaction(v2Transactions[0]);
 		}
 		minTimestamp = Date.now();
-		await sleep(5 * 60 * 1000);
+		await sleep(POLL_PERIOD_MINS * 60 * 1000);
 	}
 }
 
