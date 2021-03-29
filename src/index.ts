@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import { setTimeout } from 'timers';
+
 import { getFailedTransactions } from './alchemy';
 import { sendTransaction } from './slack';
 import { getTransactionMetadata, getV2Transactions } from './transactions';
