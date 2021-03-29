@@ -1,8 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { setTimeout } from 'timers';
-
 import { getFailedTransactions } from './alchemy';
 import { sendTransaction } from './slack';
 import { getTransactionMetadata, getV2Transactions } from './transactions';
@@ -10,6 +8,7 @@ import { getTransactionMetadata, getV2Transactions } from './transactions';
 const POLL_PERIOD_MINS = 5;
 
 async function sleep(ms: number) {
+	// @ts-ignore
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
