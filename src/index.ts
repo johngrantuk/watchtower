@@ -1,11 +1,19 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import express from 'express';
+const app = express();
+
 import { getFailedTransactions } from './alchemy';
 import { sendTransaction } from './slack';
 import { getTransactionMetadata, getV2Transactions } from './transactions';
 
 const POLL_PERIOD_MINS = 5;
+
+const port = process.env.PORT;
+app.listen(port, () => {
+	console.log(`Listening on port ${port}.`);
+});
 
 async function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
