@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { getSimulationUrl } from './tenderly';
 
+import { decodeContract, decodeData } from './decode';
+import { getSimulationUrl } from './tenderly';
 import { TransactionMetadata } from './transactions';
 
 const APP_ID = 'T013ZQFUALE';
@@ -32,8 +33,8 @@ function formatTransaction(tx: TransactionMetadata): string {
 		_Details_
 		*Network*: ${network}
 		*Sender*: ${tx.from}
-		*Contract*: ${tx.to}
-		*Data*: ${tx.data}
+		*Contract*: ${decodeContract(tx.to)}
+		*Data*: ${decodeData(tx.data)}
 
 		<${url}|Tenderly Simulation>
 	`;
