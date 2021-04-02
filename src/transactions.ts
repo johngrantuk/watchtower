@@ -29,7 +29,7 @@ export function getTransactionMetadata(
 export function getV2Transactions(
 	metadata: TransactionMetadata[],
 ): TransactionMetadata[] {
-	return metadata.filter((m) => m.to !== EXCHANGE_PROXY);
+	return metadata.filter((m) => m.to !== EXCHANGE_PROXY && m.chainId !== 1);
 }
 
 function getChainId(ethNetwork: number) {
