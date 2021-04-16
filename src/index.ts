@@ -7,6 +7,7 @@ const app = express();
 import { getFailedTransactions } from './alchemy';
 import { sendTransaction } from './slack';
 import { getTransactionMetadata, getV2Transactions } from './transactions';
+import { checkPools } from './subgraph';
 
 const POLL_PERIOD_MINS = 5;
 
@@ -31,6 +32,9 @@ async function loop() {
 			await sendTransaction(v2Transactions[0]);
 		}
 		minTimestamp = Date.now();
+
+		await checkPools(42);
+		// await checkPools(1); TO DO - Uncomment and update Subgraph URL & Vault Addr when mainnet ready
 		await sleep(POLL_PERIOD_MINS * 60 * 1000);
 	}
 }

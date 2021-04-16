@@ -36,3 +36,9 @@ function formatTransaction(tx: TransactionMetadata): string {
 	`;
 	return message;
 }
+
+export async function postText(text: string) {
+	await client.post(`services/${APP_ID}/${WEBKOOK_ID}/${WEBKOOK_KEY}`, {
+		text,
+	});
+}
