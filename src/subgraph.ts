@@ -1,6 +1,7 @@
-import { fetchSubgraphPools, getOnChainBalances } from 'sorv2';
+import fetch from 'isomorphic-fetch';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { postText } from './slack';
+import { getOnChainBalances } from './utils/multicall';
 
 export interface Result {
     id: string;
@@ -143,4 +144,48 @@ function formatFail(result: Result): string {
 
     const message = `_Subgraph Pool Out Of Sync ${result.id}_\n${differences}`;
     return message;
+}
+
+// Returns all public pools
+export async function fetchSubgraphPools(SubgraphUrl: string = '') {
+    // can filter for publicSwap too??
+    const query = `
+      {
+        pools: pools(first: 1000) {
+          id
+          address
+          poolType
+          swapFee
+          totalShares
+          tokens {
+            address
+            balance
+            decimals
+            weight
+          }
+          tokensList
+          totalWeight
+          amp
+        }
+      }
+    `;
+
+    console.log(`fetchSubgraphPools: ${SUBGRAPH_URL}`);
+    const response = await fetch(
+        SubgraphUrl === '' ? SUBGRAPH_URL : SubgraphUrl,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query,
+            }),
+        }
+    );
+
+    const { data } = await response.json();
+
+    return { pools: data.pools };
 }
