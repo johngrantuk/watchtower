@@ -17,7 +17,7 @@ export interface Difference {
 }
 
 const SUBGRAPH_URL: { [chainId: number]: string } = {
-    1: process.env.SUBGRAPH_MAIN || 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-kovan-v2',      // TO DO - Update this with mainnet
+    1: process.env.SUBGRAPH_MAIN || 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-v2',
     42: process.env.SUBGRAPH_KOVAN || 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-kovan-v2',    
 };
 
@@ -27,8 +27,8 @@ const MULTIADDR: { [chainId: number]: string } = {
 };
 
 const VAULTADDR: { [chainId: number]: string } = {
-    1: '0xba1222227c37746aDA22d10Da6265E02E44400DD',        // TO DO - Update this with mainnet
-    42: '0xba1222227c37746aDA22d10Da6265E02E44400DD',
+    1: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+    42: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
 };
 
 const INFURA_URL: { [chainId: number]: string } = {
@@ -58,17 +58,17 @@ export async function checkPools(chainId: number) {
             const result = comparePools(onChainPool, subgraphPool);
 
             if(!result.isSame){
-                const failMessage = formatFail(result);
+                const failMessage = formatFail(result, chainId);
                 console.log(failMessage);
                 postText(failMessage);
             }
             // else
-            //     console.log(`Pools Match ${result.id}`)
+            //     console.log(`${chainId} Pools Match ${result.id}`)
         }
     }catch(err){
         console.log('Error checking.');
         console.log(err);
-        postText(`_Error comparing Subgraph_\n${err.message}`);
+        postText(`_Error comparing Subgraph ${chainId}_\n${err.message}`);
     }
 }
 
@@ -134,7 +134,7 @@ function comparePools(onChainPool: any, subgraphPool: any): Result {
     return result;
 }
 
-function formatFail(result: Result): string {
+function formatFail(result: Result, chainId: number): string {
 
     let differences = ``;
     result.differences.forEach(difference => {
@@ -142,7 +142,7 @@ function formatFail(result: Result): string {
         differences = differences.concat(message);
     })
 
-    const message = `_Subgraph Pool Out Of Sync ${result.id}_\n${differences}`;
+    const message = `_Subgraph Pool Out Of Sync ${chainId} ${result.id}_\n${differences}`;
     return message;
 }
 
@@ -170,7 +170,7 @@ export async function fetchSubgraphPools(SubgraphUrl: string = '') {
       }
     `;
 
-    console.log(`fetchSubgraphPools: ${SUBGRAPH_URL}`);
+    console.log(`fetchSubgraphPools: ${SubgraphUrl === '' ? SUBGRAPH_URL : SubgraphUrl}`);
     const response = await fetch(
         SubgraphUrl === '' ? SUBGRAPH_URL : SubgraphUrl,
         {

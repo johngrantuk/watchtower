@@ -34,7 +34,7 @@ async function loop() {
 		minTimestamp = Date.now();
 
 		await checkPools(42);
-		// await checkPools(1); TO DO - Uncomment and update Subgraph URL & Vault Addr when mainnet ready
+		await checkPools(1);
 		await sleep(POLL_PERIOD_MINS * 60 * 1000);
 	}
 }
